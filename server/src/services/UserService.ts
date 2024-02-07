@@ -33,7 +33,7 @@ class UserService {
                 info: info
             };
         } catch (e){
-            throw new Error(e);
+            throw new Error(e.errors[0].message);
         }
     }
 
@@ -65,13 +65,13 @@ class UserService {
                 }
             });
 
-            if(!user) return { message: "There is no user with such email."};
+            if(!user) throw new Error("There is no user with such email.");
 
-            if(!user.dataValues.isVerified) return { message: "User isn't verified."};
+            if(!user.dataValues.isVerified) throw new Error("User isn't verified.");
 
             const comparePasswords = await bcrypt.compare(password, user.dataValues.password);
 
-            if(!comparePasswords) return { message: "Password is incorrect."};
+            if(!comparePasswords) throw new Error("Password is incorrect.");
 
             const token = jwt.sign({ email }, process.env.SECRETKEY);
 

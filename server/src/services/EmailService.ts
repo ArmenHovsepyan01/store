@@ -16,7 +16,7 @@ async function sendRegistrationVerificationMail(email: string){
     const token = jwt.sign({ email }, process.env.SECRETKEY, { expiresIn: '1800s' });
 
     const html = `<h1>Click the button to verify your account.</h1>
-    <a style="text-decoration: none; background: gray; color: white; padding: 6px 12px; border-radius: 4px" href="http://localhost:${process.env.PORT}/users/verify?token=${token}"
+    <a style="text-decoration: none; background: gray; color: white; padding: 6px 12px; border-radius: 4px" href="http://localhost:${process.env.PORT}/api/verify?token=${token}"
      target="_blank">Verify</a>`;
     const mailOptions = {
         from: process.env.MAIL,

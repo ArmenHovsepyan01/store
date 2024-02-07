@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 export const checkUserCredentials = (req: Request, res: Response, next: NextFunction) => {
+    // TODO: not only gmail
+    // TODO: change variable name
     const regexp = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+(@gmail.com)$/gmi;
 
     if(!req.body) {

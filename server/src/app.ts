@@ -17,6 +17,6 @@ const start = async () => {
 };
 
 app.use(express.json());
-app.use("/users", router);
+app.use("/api", router);
 
 start();
