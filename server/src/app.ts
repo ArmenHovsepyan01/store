@@ -1,5 +1,7 @@
 import express from "express";
+
 import { connectToDB } from "./config/database";
+
 import router from "./routes/routes";
 
 const app = express();

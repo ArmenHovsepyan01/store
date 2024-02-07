@@ -1,28 +1,35 @@
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-        user: '',
-        pass: ''
+        user: process.env.MAIL,
+        pass: process.env.PASSWORD
     }
 });
 
-async function sendRegistrationVerificationMail(email){
-        const mailOptions = {
-            from: "",
-            to: email,
-            subject: 'Registration Confirmation',
-            text: 'Thank you for registering!'
-        }
+async function sendRegistrationVerificationMail(email: string){
+    const token = jwt.sign({ email }, process.env.SECRETKEY, { expiresIn: '1800s' });
 
-        try {
-            await transporter.sendMail(mailOptions);
-            console.log('Registration confirmation email sent.');
-        } catch (error) {
-            console.error('Error sending registration confirmation email:', error);
-            throw new Error('Failed to send registration confirmation email.');
-        }
+    const html = `<h1>Click the button to verify your account.</h1>
+    <a style="text-decoration: none; background: gray; color: white; padding: 6px 12px; border-radius: 4px" href="http://localhost:${process.env.PORT}/users/verify?token=${token}"
+     target="_blank">Verify</a>`;
+    const mailOptions = {
+        from: process.env.MAIL,
+        to: email,
+        subject: 'Registration Confirmation',
+        html: html
     }
+
+    try {
+        return await transporter.sendMail(mailOptions);
+    } catch (error) {
+        throw new Error(`Failed to send registration confirmation email::${error}`);
+    }
+}
 
 export default sendRegistrationVerificationMail;
